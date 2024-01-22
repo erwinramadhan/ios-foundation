@@ -23,9 +23,9 @@ extension HomeViewController {
     func saveMovieToDb(_ movie: Movie, completionHandler: @escaping ((Bool, String?) -> Void) ) {
         databaseManager.saveMovieToDb(movie: movie, completion: { result in
             switch result {
-                case .success(let isSuccess):
+            case .success(let isSuccess):
                 completionHandler(isSuccess, nil)
-                case .failure(let error):
+            case .failure(let error):
                 completionHandler(false, "Error save movie db \(error.localizedDescription)")
             }
         })

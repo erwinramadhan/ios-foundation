@@ -8,27 +8,27 @@
 import Foundation
 
 struct MovieDetail: Codable {
-    let adult: Bool
-    let backdropPath: String?
-    let budget: Int
-    let genres: [Genre]
-    let homepage: String
-    let id: Int
-    let imdbID: String?
-    let originalLanguage: String
-    let originalTitle: String
-    let overview: String
-    let popularity: Double
-    let posterPath: String?
-    let releaseDate: String
-    let revenue: Int
-    let runtime: Int
-    let status: String
-    let tagline: String
-    let title: String
-    let video: Bool
-    let voteAverage: Double
-    let voteCount: Int
+    var adult: Bool?
+    var backdropPath: String?
+    var budget: Int?
+    var genres: [Genre]?
+    var homepage: String?
+    var id: Int?
+    var imdbID: String?
+    var originalLanguage: String?
+    var originalTitle: String?
+    var overview: String?
+    var popularity: Double?
+    var posterPath: String?
+    var releaseDate: String?
+    var revenue: Int?
+    var runtime: Int?
+    var status: String?
+    var tagline: String?
+    var title: String?
+    var video: Bool?
+    var voteAverage: Double?
+    var voteCount: Int?
     
     private enum CodingKeys: String, CodingKey {
         case adult, budget, genres, homepage, id, overview, popularity, revenue, runtime, status, tagline, title, video
@@ -44,6 +44,6 @@ struct MovieDetail: Codable {
 }
 
 struct Genre: Codable {
-    let id: Int
-    let name: String
+    var id: Int?
+    var name: String?
 }

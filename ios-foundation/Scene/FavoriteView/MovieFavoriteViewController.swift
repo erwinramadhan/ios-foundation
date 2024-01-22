@@ -22,9 +22,9 @@ extension MovieFavoriteViewController {
     func fetchMoviesFavorite(completionHandler: @escaping ([Movie], String?) -> Void) {
         databaseManager.fetchMovieFromDb(completion: { result in
             switch result {
-                case .success(let data):
+            case .success(let data):
                 completionHandler(data, nil)
-                case .failure(let error):
+            case .failure(let error):
                 completionHandler([], "Error get movies favorites \(error.localizedDescription)")
             }
         })
