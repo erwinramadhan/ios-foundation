@@ -54,9 +54,14 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // to restore the scene back to its current state.
 
         // Save changes in the application's managed object context when the application transitions to the background.
-        (UIApplication.shared.delegate as? AppDelegate)?.saveContext()
+        CoreDataContainer.saveContext(completion: { result in
+            switch result {
+                case .success(let isSuccess):
+                    debugPrint("[LOG - Success Core Data Did Enter Background]:", isSuccess)
+                case .failure(let error):
+                    debugPrint("[LOG - Error Core Data Did Enter Background]:", error)
+            }
+        })
     }
-
-
 }
 
