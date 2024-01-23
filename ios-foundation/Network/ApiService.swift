@@ -9,7 +9,7 @@ import Foundation
 
 enum Endpoint: String {
     case movieList = "movie/now_playing"
-    case movie = "movie"
+    case movie = "movie/"
 }
 
 enum ApiURL: String {
