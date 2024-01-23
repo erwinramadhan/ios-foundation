@@ -25,6 +25,7 @@ class DetailViewController: UIViewController {
     @IBOutlet weak var releaseDateLabel: UILabel!
     
     @IBOutlet weak var descriptionLabel: UILabel!
+    @IBOutlet weak var tagStackView: UIStackView!
     
     var movieId: Int?
     var movieDetail: MovieDetail?
@@ -57,6 +58,10 @@ class DetailViewController: UIViewController {
                         self.languageLabel.text = movie.originalLanguage
                         self.releaseDateLabel.text = movie.releaseDate
                         self.descriptionLabel.text = movie.overview
+                        
+                        movie.genres?.forEach{
+                            self.setupTags(title: $0.name ?? "")
+                        }
                     }
                 case .failure(let error):
                     break
@@ -66,6 +71,7 @@ class DetailViewController: UIViewController {
         
        
         roundTopCorners(view: contentView, radius: 10)
+//        setupCollectionView()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -102,19 +108,31 @@ class DetailViewController: UIViewController {
         view.layer.mask = maskLayer
     }
     
-    private func setupCollectionView() {
-        tagCollectionView.dataSource = self
-        tagCollectionView.delegate = self
-    }
-
-}
-
-extension DetailViewController: UICollectionViewDelegate, UICollectionViewDataSource {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 0
+    func setupTags(title: String) {
+        let view = TagView()
+        view.setData(title: title)
+        tagStackView.addArrangedSubview(view)
     }
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        return UICollectionViewCell()
-    }
+//    private func setupCollectionView() {
+//        tagCollectionView.dataSource = self
+//        tagCollectionView.delegate = self
+//
+//        let nib = UINib(nibName: TagCollectionViewCell.identifier, bundle: Bundle(for: TagCollectionViewCell.self))
+//        tagCollectionView.register(nib, forCellWithReuseIdentifier: TagCollectionViewCell.identifier)
+//    }
+
 }
+
+//extension DetailViewController: UICollectionViewDelegate, UICollectionViewDataSource {
+//    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+//        return 2
+//    }
+//
+//    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+//        guard let cell = tagCollectionView.dequeueReusableCell(withReuseIdentifier: TagCollectionViewCell.identifier, for: indexPath) as? TagCollectionViewCell else { return UICollectionViewCell() }
+//        cell.layer.cornerRadius = 10 // Adjust your corner radius here
+//        cell.clipsToBounds = true
+//        return cell
+//    }
+//}

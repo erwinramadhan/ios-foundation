@@ -19,7 +19,7 @@
                 <outlet property="ratingLabel" destination="kuH-9I-9E0" id="jnT-k8-Iwb"/>
                 <outlet property="releaseDateLabel" destination="l3C-Ia-SeF" id="y0v-En-waS"/>
                 <outlet property="statusLabel" destination="MMG-YR-63B" id="Qc1-tW-oz6"/>
-                <outlet property="tagCollectionView" destination="xZh-tb-hEL" id="4Gm-ez-O0v"/>
+                <outlet property="tagStackView" destination="ASu-1I-I6j" id="4dQ-Lo-3wX"/>
                 <outlet property="titleLabel" destination="WCM-6W-Lpu" id="3cN-La-kYV"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
@@ -126,19 +126,17 @@ Home</string>
                                                                                 </imageView>
                                                                             </subviews>
                                                                         </stackView>
-                                                                        <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="xZh-tb-hEL">
+                                                                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" translatesAutoresizingMaskIntoConstraints="NO" id="eXz-P8-98G">
                                                                             <rect key="frame" x="0.0" y="86.333333333333314" width="345" height="18"/>
-                                                                            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                                                            <constraints>
-                                                                                <constraint firstAttribute="height" constant="18" id="dnP-ge-wl6"/>
-                                                                            </constraints>
-                                                                            <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="oCd-gI-tCC">
-                                                                                <size key="itemSize" width="128" height="128"/>
-                                                                                <size key="headerReferenceSize" width="0.0" height="0.0"/>
-                                                                                <size key="footerReferenceSize" width="0.0" height="0.0"/>
-                                                                                <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
-                                                                            </collectionViewFlowLayout>
-                                                                        </collectionView>
+                                                                            <subviews>
+                                                                                <stackView opaque="NO" contentMode="scaleToFill" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="ASu-1I-I6j">
+                                                                                    <rect key="frame" x="0.0" y="0.0" width="345" height="18"/>
+                                                                                    <constraints>
+                                                                                        <constraint firstAttribute="height" constant="18" id="r5n-hZ-lGi"/>
+                                                                                    </constraints>
+                                                                                </stackView>
+                                                                            </subviews>
+                                                                        </stackView>
                                                                         <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" translatesAutoresizingMaskIntoConstraints="NO" id="jXo-mg-TPd">
                                                                             <rect key="frame" x="0.0" y="120.33333333333333" width="345" height="32.666666666666671"/>
                                                                             <subviews>
