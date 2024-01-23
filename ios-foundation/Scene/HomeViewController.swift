@@ -22,18 +22,7 @@ class HomeViewController: UIViewController {
         super.viewDidLoad()
         iconBackImage.image = nil
         setupTableView()
-        movieService.getMoviesWithCompletion { [weak self] result in
-            guard let self else { return }
-            switch result {
-            case .success(let movie):
-                self.movies = movie.results
-                DispatchQueue.main.async {
-                    self.tableView.reloadData()
-                }
-            case .failure(let error):
-                break
-            }
-        }
+        fetchMovieList()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -67,7 +56,9 @@ extension HomeViewController: UITableViewDataSource, UITableViewDelegate {
                        rating: String(format: "%.1f", movie.voteAverage ?? 0),
                        releaseDate: movie.releaseDate ?? "",
                        language: movie.originalLanguage ?? "",
-                       imageUrl: movie.posterPath ?? "")
+                       imageUrl: movie.posterPath ?? "",
+                       isFavorite: movie.isFavorite ?? false)
+        
         if indexPath.row == 0 {
             cell.isFirstCell()
         }
@@ -75,12 +66,13 @@ extension HomeViewController: UITableViewDataSource, UITableViewDelegate {
         cell.actionAddFavorite = { [weak self] in
             self?.saveMovieToDb(movie) {[weak self] isSuccess, error in
                 guard let self else { return }
-                print("isSuccess", isSuccess)
                 if isSuccess {
+                    self.fetchFavoriteMovieList { result in
+                        cell.favoriteButton.isHidden = result
+                    }
+                } else {
                     
-                    return
                 }
-                
             }
         }
         
@@ -112,5 +104,47 @@ extension HomeViewController {
                 completionHandler(false, "Error save movie db \(error.localizedDescription)")
             }
         })
+    }
+    
+    func fetchMovieList() {
+        movieService.getMoviesWithCompletion { [weak self] result in
+            guard let self else { return }
+            switch result {
+            case .success(let movie):
+                self.movies = movie.results
+                self.fetchFavoriteMovieList { isSuccess in
+                    if isSuccess {
+                        DispatchQueue.main.async {
+                            self.tableView.reloadData()
+                        }
+                    } else {
+                        
+                    }
+                }
+            case .failure(let error):
+                break
+            }
+        }
+    }
+    
+    func fetchFavoriteMovieList(completionHandler: @escaping (Bool) -> Void) {
+        self.databaseManager.fetchMovieFromDb { resultDb in
+            switch resultDb {
+            case .success(let data):
+                var moviesFavorite = [Movie]()
+                data.forEach { movie in
+                    moviesFavorite.append(movie)
+                }
+                
+                for (index, movieFavorite) in moviesFavorite.enumerated() {
+                    if self.movies?[index].id == movieFavorite.id {
+                        self.movies?[index].isFavorite = movieFavorite.isFavorite ?? false
+                    }
+                }
+                completionHandler(true)
+            case .failure(let error):
+                completionHandler(false)
+            }
+        }
     }
 }

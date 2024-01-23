@@ -106,6 +106,7 @@
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
             <connections>
                 <outlet property="contentTopConstraint" destination="dMB-d8-xjo" id="Csk-sD-Tz3"/>
+                <outlet property="favoriteButton" destination="Tl0-Mt-W3O" id="7vF-kf-CfO"/>
                 <outlet property="languageLabel" destination="aFy-Fu-Ngn" id="LA5-rG-Hbg"/>
                 <outlet property="mainImageView" destination="aXu-Ey-zma" id="TYP-bf-cyQ"/>
                 <outlet property="ratingLabel" destination="4Le-At-2ie" id="GjK-Uk-IKG"/>

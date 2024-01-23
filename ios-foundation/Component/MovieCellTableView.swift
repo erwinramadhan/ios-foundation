@@ -20,6 +20,8 @@ class MovieCellTableView: UITableViewCell {
     @IBOutlet weak var releaseDateLabel: UILabel!
     @IBOutlet weak var languageLabel: UILabel!
     
+    @IBOutlet weak var favoriteButton: UIButton!
+    
     var actionAddFavorite: (() -> Void)?
     var actionContentViewCell: (() -> Void)?
     
@@ -41,11 +43,13 @@ class MovieCellTableView: UITableViewCell {
                           rating: String,
                           releaseDate: String,
                           language: String,
-                          imageUrl: String) {
+                          imageUrl: String,
+                          isFavorite: Bool?) {
         titleLabel.text = title
         ratingLabel.text = "⭐️ " + rating + "/10"
         releaseDateLabel.text = releaseDate
         languageLabel.text = "Language: " + language.uppercased()
+        favoriteButton.isHidden = isFavorite ?? false
         guard let url = URL(string: ApiURL.imageBaseURL.rawValue + imageUrl) else { return }
         Utility().downloadImage(from: url) { [weak self] data in
             guard let self else { return }
