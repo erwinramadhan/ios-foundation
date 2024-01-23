@@ -76,15 +76,16 @@
                         </subviews>
                     </stackView>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Tl0-Mt-W3O">
-                        <rect key="frame" x="218.33333333333334" y="79.666666666666671" width="89.666666666666657" height="28.333333333333329"/>
+                        <rect key="frame" x="213" y="79.666666666666671" width="95" height="28.333333333333329"/>
                         <color key="tintColor" systemColor="systemBlueColor"/>
                         <state key="normal" title="Button"/>
                         <buttonConfiguration key="configuration" style="filled" cornerStyle="capsule">
                             <attributedString key="attributedTitle">
-                                <fragment content=" Add To Fav">
+                                <fragment content="Add Favorite">
                                     <attributes>
                                         <color key="NSColor" red="0.9936616790821442" green="0.98665268412307006" blue="1" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                         <font key="NSFont" metaFont="cellTitle"/>
+                                        <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
                                     </attributes>
                                 </fragment>
                             </attributedString>
@@ -93,14 +94,37 @@
                             <action selector="didSelectAddToFav:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="ged-zd-1y4"/>
                         </connections>
                     </button>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZaL-fI-CrC">
+                        <rect key="frame" x="190.66666666666666" y="79.666666666666671" width="117.33333333333334" height="28.333333333333329"/>
+                        <state key="normal" title="Button"/>
+                        <buttonConfiguration key="configuration" style="filled" cornerStyle="capsule">
+                            <backgroundConfiguration key="background">
+                                <color key="backgroundColor" systemColor="systemPinkColor"/>
+                            </backgroundConfiguration>
+                            <attributedString key="attributedTitle">
+                                <fragment content="Remove Favorite">
+                                    <attributes>
+                                        <color key="NSColor" red="0.9936616790821442" green="0.98665268412307006" blue="1" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                        <font key="NSFont" metaFont="cellTitle"/>
+                                        <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
+                                    </attributes>
+                                </fragment>
+                            </attributedString>
+                        </buttonConfiguration>
+                        <connections>
+                            <action selector="didSelectRemoveFav:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="yas-fm-R1M"/>
+                        </connections>
+                    </button>
                 </subviews>
                 <constraints>
+                    <constraint firstAttribute="bottom" secondItem="ZaL-fI-CrC" secondAttribute="bottom" constant="12" id="FpK-SD-DkS"/>
                     <constraint firstItem="zAq-lN-64f" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="Ggg-Ty-7IN"/>
                     <constraint firstAttribute="bottom" secondItem="zAq-lN-64f" secondAttribute="bottom" id="ULt-nn-yBf"/>
                     <constraint firstAttribute="trailing" secondItem="zAq-lN-64f" secondAttribute="trailing" id="bZ0-FB-Nq0"/>
                     <constraint firstAttribute="trailing" secondItem="Tl0-Mt-W3O" secondAttribute="trailing" constant="12" id="brL-vs-BdD"/>
                     <constraint firstItem="zAq-lN-64f" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="16" id="dMB-d8-xjo"/>
                     <constraint firstAttribute="bottom" secondItem="Tl0-Mt-W3O" secondAttribute="bottom" constant="12" id="nd7-QK-F3A"/>
+                    <constraint firstAttribute="trailing" secondItem="ZaL-fI-CrC" secondAttribute="trailing" constant="12" id="ntY-BH-3C1"/>
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
@@ -111,6 +135,7 @@
                 <outlet property="mainImageView" destination="aXu-Ey-zma" id="TYP-bf-cyQ"/>
                 <outlet property="ratingLabel" destination="4Le-At-2ie" id="GjK-Uk-IKG"/>
                 <outlet property="releaseDateLabel" destination="r5g-Ro-LS2" id="SQ3-Kp-0vm"/>
+                <outlet property="removeFavoriteButton" destination="ZaL-fI-CrC" id="veF-UJ-g1D"/>
                 <outlet property="titleLabel" destination="f3P-uf-fHw" id="6sO-6U-FcH"/>
             </connections>
             <point key="canvasLocation" x="-58" y="20"/>
@@ -123,6 +148,9 @@
         </systemColor>
         <systemColor name="systemBlueColor">
             <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="systemPinkColor">
+            <color red="1" green="0.17647058823529413" blue="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

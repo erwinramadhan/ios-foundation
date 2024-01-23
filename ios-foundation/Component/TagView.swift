@@ -8,6 +8,7 @@
 import UIKit
 
 class TagView: UIView {
+    @IBOutlet weak var parentSV: UIStackView!
     @IBOutlet weak var titleLabel: UILabel!
     
     public override init(frame: CGRect) {
@@ -43,7 +44,9 @@ class TagView: UIView {
     }
     
     func setupCornerRadius() {
-        self.layer.cornerRadius = self.frame.size.height / 2
-        self.clipsToBounds = true
+        parentSV.layer.cornerRadius = parentSV.frame.size.height / 2
+        parentSV.clipsToBounds = true
+//        layer.cornerRadius = radius
+//        clipsToBounds = true
     }
 }

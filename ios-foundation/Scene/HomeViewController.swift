@@ -22,10 +22,15 @@ class HomeViewController: UIViewController {
         super.viewDidLoad()
         iconBackImage.image = nil
         setupTableView()
+        setupTapGestureRecognizer()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         fetchMovieList { isSuccess in
             DispatchQueue.main.async {
                 self.tableView.reloadData()
-            }            
+            }
         }
     }
     
@@ -40,6 +45,17 @@ class HomeViewController: UIViewController {
         
         let nib = UINib(nibName: MovieCellTableView.identifier, bundle: Bundle(for: MovieCellTableView.self))
         tableView.register(nib, forCellReuseIdentifier: MovieCellTableView.identifier)
+    }
+    
+    private func setupTapGestureRecognizer() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(favoriteIconTapped))
+        iconFavoriteImage.isUserInteractionEnabled = true
+        iconFavoriteImage.addGestureRecognizer(tapGesture)
+    }
+    
+    @objc private func favoriteIconTapped() {
+        let viewControllerToNavigateTo = MovieFavoriteViewController()
+        navigationController?.pushViewController(viewControllerToNavigateTo, animated: true)
     }
 }
 
@@ -61,7 +77,8 @@ extension HomeViewController: UITableViewDataSource, UITableViewDelegate {
                        releaseDate: movie.releaseDate ?? "",
                        language: movie.originalLanguage ?? "",
                        imageUrl: movie.posterPath ?? "",
-                       isFavorite: movie.isFavorite ?? false)
+                       isFavorite: movie.isFavorite ?? false,
+                       isHome: true)
         
         if indexPath.row == 0 {
             cell.isFirstCell()
@@ -129,15 +146,11 @@ extension HomeViewController {
         self.databaseManager.fetchMovieFromDb { resultDb in
             switch resultDb {
             case .success(let data):
-                var moviesFavorite = [Movie]()
-                data.forEach { movie in
-                    moviesFavorite.append(movie)
-                }
-                
-                for (index, movieFavorite) in moviesFavorite.enumerated() {
-                    if self.movies?[index].id == movieFavorite.id {
-                        self.movies?[index].isFavorite = movieFavorite.isFavorite ?? false
-                    }
+                for movieFavorite in data {
+                    let index = self.movies?.firstIndex{ $0.id == movieFavorite.id }
+                    guard let index else { continue }
+                    self.movies?[index].isFavorite = movieFavorite.isFavorite ?? false
+                    
                 }
                 completionHandler(true)
             case .failure(let error):

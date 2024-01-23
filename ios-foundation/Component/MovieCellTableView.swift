@@ -21,9 +21,11 @@ class MovieCellTableView: UITableViewCell {
     @IBOutlet weak var languageLabel: UILabel!
     
     @IBOutlet weak var favoriteButton: UIButton!
+    @IBOutlet weak var removeFavoriteButton: UIButton!
     
     var actionAddFavorite: (() -> Void)?
     var actionContentViewCell: (() -> Void)?
+    var actionRemoveFavorite: (() -> Void)?
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -44,12 +46,14 @@ class MovieCellTableView: UITableViewCell {
                           releaseDate: String,
                           language: String,
                           imageUrl: String,
-                          isFavorite: Bool?) {
+                          isFavorite: Bool?,
+                          isHome: Bool = false) {
         titleLabel.text = title
         ratingLabel.text = "⭐️ " + rating + "/10"
         releaseDateLabel.text = releaseDate
         languageLabel.text = "Language: " + language.uppercased()
         favoriteButton.isHidden = isFavorite ?? false
+        removeFavoriteButton.isHidden = isHome ? true : !(isFavorite ?? false)
         guard let url = URL(string: ApiURL.imageBaseURL.rawValue + imageUrl) else { return }
         Utility().downloadImage(from: url) { [weak self] data in
             guard let self else { return }
@@ -65,6 +69,10 @@ class MovieCellTableView: UITableViewCell {
     
     @IBAction func didSelectAddToFav(_ sender: Any) {
         actionAddFavorite?()
+    }
+    
+    @IBAction func didSelectRemoveFav(_ sender: Any) {
+        actionRemoveFavorite?()
     }
     
     private func setupTapGestureRecognizer() {

@@ -10,6 +10,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ViewController" customModule="ios_foundation" customModuleProvider="target">
             <connections>
+                <outlet property="parentSV" destination="FJX-Yi-5p9" id="j1T-VY-yqt"/>
                 <outlet property="titleLabel" destination="Jef-ln-xef" id="wFG-pE-g0h"/>
             </connections>
         </placeholder>

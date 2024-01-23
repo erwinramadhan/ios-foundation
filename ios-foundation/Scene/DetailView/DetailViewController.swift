@@ -10,7 +10,8 @@ import UIKit
 class DetailViewController: UIViewController {
     
     let movieService = MovieService.shared
-
+    let databaseManager = DatabaseManager()
+    
     @IBOutlet weak var backImage: UIImageView!
     @IBOutlet weak var bookmarkImage: UIImageView!
     
@@ -19,6 +20,7 @@ class DetailViewController: UIViewController {
     @IBOutlet weak var contentView: UIView!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var ratingLabel: UILabel!
+    @IBOutlet weak var bookmarkDetailIcon: UIImageView!
     
     @IBOutlet weak var statusLabel: UILabel!
     @IBOutlet weak var languageLabel: UILabel!
@@ -43,6 +45,7 @@ class DetailViewController: UIViewController {
         super.viewDidLoad()
         setupTapGestureRecognizer()
         bookmarkImage.image = nil
+        roundTopCorners(view: contentView, radius: 10)
         
         if let movieId {
             movieService.getMovieDetailWithCompletion(movieId: movieId) { [weak self] result in
@@ -50,17 +53,25 @@ class DetailViewController: UIViewController {
                 switch result {
                 case .success(let movie):
                     self.movieDetail = movie
-                    DispatchQueue.main.async {
-                        self.loadPosterImage(urlString: ApiURL.imageBaseURL.rawValue + (movie.posterPath ?? ""))
-                        self.titleLabel.text = movie.originalTitle
-                        self.ratingLabel.text = "⭐️ " + String(format: "%.1f", movie.voteAverage ?? 0) + "/10"
-                        self.statusLabel.text = movie.status
-                        self.languageLabel.text = movie.originalLanguage
-                        self.releaseDateLabel.text = movie.releaseDate
-                        self.descriptionLabel.text = movie.overview
-                        
-                        movie.genres?.forEach{
-                            self.setupTags(title: $0.name ?? "")
+                    fetchMoviesFavorite { [weak self] movies, error in
+                        guard let self else { return }
+                        DispatchQueue.main.async {
+                            let isFavorite = movies.first{ $0.id == movie.id }?.isFavorite
+                            self.loadPosterImage(urlString: ApiURL.imageBaseURL.rawValue + (movie.posterPath ?? ""))
+                            self.titleLabel.text = movie.originalTitle
+                            self.ratingLabel.text = "⭐️ " + String(format: "%.1f", movie.voteAverage ?? 0) + "/10"
+                            self.statusLabel.text = movie.status
+                            self.languageLabel.text = movie.originalLanguage?.uppercased()
+                            self.releaseDateLabel.text = movie.releaseDate
+                            self.descriptionLabel.text = movie.overview
+                            
+                            if isFavorite == true {
+                                self.bookmarkDetailIcon.image = .init(systemName: "bookmark.fill")
+                            }
+                            
+                            movie.genres?.forEach{
+                                self.setupTags(title: $0.name ?? "")
+                            }
                         }
                     }
                 case .failure(let error):
@@ -68,10 +79,6 @@ class DetailViewController: UIViewController {
                 }
             }
         }
-        
-       
-        roundTopCorners(view: contentView, radius: 10)
-//        setupCollectionView()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -92,17 +99,26 @@ class DetailViewController: UIViewController {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(backViewTapped))
         backImage.isUserInteractionEnabled = true
         backImage.addGestureRecognizer(tapGesture)
+        
+        let tapGestureAddToFav = UITapGestureRecognizer(target: self, action: #selector(addToFav))
+        bookmarkDetailIcon.isUserInteractionEnabled = true
+        bookmarkDetailIcon.addGestureRecognizer(tapGestureAddToFav)
     }
     
     @objc private func backViewTapped() {
         self.navigationController?.popViewController(animated: true)
     }
     
+    @objc private func addToFav() {
+        let movie = Movie(genreIds: [], id: movieId)
+        makeMovieFavorite(movie: movie)
+    }
+    
     func roundTopCorners(view: UIView, radius: CGFloat) {
         let path = UIBezierPath(roundedRect: view.bounds,
                                 byRoundingCorners: [.topLeft, .topRight],
                                 cornerRadii: CGSize(width: radius, height: radius))
-
+        
         let maskLayer = CAShapeLayer()
         maskLayer.path = path.cgPath
         view.layer.mask = maskLayer
@@ -114,25 +130,38 @@ class DetailViewController: UIViewController {
         tagStackView.addArrangedSubview(view)
     }
     
-//    private func setupCollectionView() {
-//        tagCollectionView.dataSource = self
-//        tagCollectionView.delegate = self
-//
-//        let nib = UINib(nibName: TagCollectionViewCell.identifier, bundle: Bundle(for: TagCollectionViewCell.self))
-//        tagCollectionView.register(nib, forCellWithReuseIdentifier: TagCollectionViewCell.identifier)
-//    }
-
+    func makeMovieFavorite(movie: Movie) {
+        saveMovieToDb(movie) {[weak self] isSuccess, error in
+            guard let self else { return }
+            if isSuccess {
+                self.bookmarkDetailIcon.image = .init(systemName: "bookmark.fill")
+            } else {
+                
+            }
+        }
+    }
 }
 
-//extension DetailViewController: UICollectionViewDelegate, UICollectionViewDataSource {
-//    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-//        return 2
-//    }
-//
-//    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-//        guard let cell = tagCollectionView.dequeueReusableCell(withReuseIdentifier: TagCollectionViewCell.identifier, for: indexPath) as? TagCollectionViewCell else { return UICollectionViewCell() }
-//        cell.layer.cornerRadius = 10 // Adjust your corner radius here
-//        cell.clipsToBounds = true
-//        return cell
-//    }
-//}
+extension DetailViewController {
+    func fetchMoviesFavorite(completionHandler: @escaping ([Movie], String?) -> Void) {
+        databaseManager.fetchMovieFromDb(completion: { result in
+            switch result {
+            case .success(let data):
+                completionHandler(data, nil)
+            case .failure(let error):
+                completionHandler([], "Error get movies favorites \(error.localizedDescription)")
+            }
+        })
+    }
+    
+    func saveMovieToDb(_ movie: Movie, completionHandler: @escaping ((Bool, String?) -> Void) ) {
+        databaseManager.saveMovieToDb(movie: movie, completion: { result in
+            switch result {
+            case .success(let isSuccess):
+                completionHandler(isSuccess, nil)
+            case .failure(let error):
+                completionHandler(false, "Error save movie db \(error.localizedDescription)")
+            }
+        })
+    }
+}
