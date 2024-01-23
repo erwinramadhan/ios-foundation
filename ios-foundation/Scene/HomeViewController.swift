@@ -22,7 +22,11 @@ class HomeViewController: UIViewController {
         super.viewDidLoad()
         iconBackImage.image = nil
         setupTableView()
-        fetchMovieList()
+        fetchMovieList { isSuccess in
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }            
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -106,20 +110,14 @@ extension HomeViewController {
         })
     }
     
-    func fetchMovieList() {
+    func fetchMovieList(completionHandler: @escaping (Bool) -> Void) {
         movieService.getMoviesWithCompletion { [weak self] result in
             guard let self else { return }
             switch result {
             case .success(let movie):
                 self.movies = movie.results
                 self.fetchFavoriteMovieList { isSuccess in
-                    if isSuccess {
-                        DispatchQueue.main.async {
-                            self.tableView.reloadData()
-                        }
-                    } else {
-                        
-                    }
+                    completionHandler(isSuccess)
                 }
             case .failure(let error):
                 break
