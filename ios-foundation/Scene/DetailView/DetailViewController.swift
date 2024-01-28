@@ -7,10 +7,28 @@
 
 import UIKit
 
+protocol DispatchQueueType {
+    func async(execute work: @escaping @convention(block) () -> Void)
+}
+
+extension DispatchQueue: DispatchQueueType {
+    func async(execute work: @escaping @convention(block) () -> Void) {
+        async(group: nil, qos: .unspecified, flags: [], execute: work)
+    }
+}
+
+final class DispatchQueueMock: DispatchQueueType {
+    func async(execute work: @escaping @convention(block) () -> Void) {
+        work()
+    }
+}
+
+
 class DetailViewController: UIViewController {
     
-    let movieService = MovieService.shared
-    let databaseManager = DatabaseManager()
+    let mainDispatchQueue: DispatchQueueType
+    public var movieService: MovieServiceProtocol = MovieService.shared
+    public var databaseManager: DatabaseManagerProtocol = DatabaseManager()
     
     @IBOutlet weak var backImage: UIImageView!
     @IBOutlet weak var bookmarkImage: UIImageView!
@@ -32,7 +50,8 @@ class DetailViewController: UIViewController {
     var movieId: Int?
     var movieDetail: MovieDetail?
     
-    init(movieId: Int) {
+    init(movieId: Int, mainDispatchQueue: DispatchQueueType = DispatchQueue.main) {
+        self.mainDispatchQueue = mainDispatchQueue
         self.movieId = movieId
         super.init(nibName: nil, bundle: nil)
     }
@@ -48,36 +67,7 @@ class DetailViewController: UIViewController {
         roundTopCorners(view: contentView, radius: 10)
         
         if let movieId {
-            movieService.getMovieDetailWithCompletion(movieId: movieId) { [weak self] result in
-                guard let self else { return }
-                switch result {
-                case .success(let movie):
-                    self.movieDetail = movie
-                    fetchMoviesFavorite { [weak self] movies, error in
-                        guard let self else { return }
-                        DispatchQueue.main.async {
-                            let isFavorite = movies.first{ $0.id == movie.id }?.isFavorite
-                            self.loadPosterImage(urlString: ApiURL.imageBaseURL.rawValue + (movie.posterPath ?? ""))
-                            self.titleLabel.text = movie.originalTitle
-                            self.ratingLabel.text = "⭐️ " + String(format: "%.1f", movie.voteAverage ?? 0) + "/10"
-                            self.statusLabel.text = movie.status
-                            self.languageLabel.text = movie.originalLanguage?.uppercased()
-                            self.releaseDateLabel.text = movie.releaseDate
-                            self.descriptionLabel.text = movie.overview
-                            
-                            if isFavorite == true {
-                                self.bookmarkDetailIcon.image = .init(systemName: "bookmark.fill")
-                            }
-                            
-                            movie.genres?.forEach{
-                                self.setupTags(title: $0.name ?? "")
-                            }
-                        }
-                    }
-                case .failure(let error):
-                    break
-                }
-            }
+            fetchMovieDetail(movieId)
         }
     }
     
@@ -163,5 +153,39 @@ extension DetailViewController {
                 completionHandler(false, "Error save movie db \(error.localizedDescription)")
             }
         })
+    }
+    
+    func fetchMovieDetail(_ movieId: Int) {
+        movieService.getMovieDetailWithCompletion(movieId: movieId) { [weak self] result in
+            guard let self else { return }
+            switch result {
+            case .success(let movie):
+                self.movieDetail = movie
+                fetchMoviesFavorite { [weak self] movies, error in
+                    guard let self else { return }
+                    let isFavorite = movies.first{ $0.id == movie.id }?.isFavorite
+                    self.movieDetail?.isFavorite = isFavorite
+                    mainDispatchQueue.async {
+                        self.loadPosterImage(urlString: ApiURL.imageBaseURL.rawValue + (movie.posterPath ?? ""))
+                        self.titleLabel.text = movie.originalTitle
+                        self.ratingLabel.text = "⭐️ " + String(format: "%.1f", movie.voteAverage ?? 0) + "/10"
+                        self.statusLabel.text = movie.status
+                        self.languageLabel.text = movie.originalLanguage?.uppercased()
+                        self.releaseDateLabel.text = movie.releaseDate
+                        self.descriptionLabel.text = movie.overview
+                        
+                        if isFavorite == true {
+                            self.bookmarkDetailIcon.image = .init(systemName: "bookmark.fill")
+                        }
+                        
+                        movie.genres?.forEach{
+                            self.setupTags(title: $0.name ?? "")
+                        }
+                    }
+                }
+            case .failure(let error):
+                break
+            }
+        }
     }
 }

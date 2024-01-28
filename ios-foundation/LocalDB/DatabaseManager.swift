@@ -8,7 +8,25 @@
 import Foundation
 import CoreData
 
-class DatabaseManager: NSObject {
+protocol DatabaseManagerProtocol {
+    func saveMovieToDb(movie: Movie, completion: @escaping ((Result<Bool, Error>) -> Void))
+    func fetchMovieFromDb(completion: @escaping ((Result<[Movie], Error>) -> Void))
+    func deleteMovieFromDb(movieId: Int, completion: @escaping ((Result<Bool, Error>) -> Void))
+}
+
+extension DatabaseManagerProtocol {
+    func saveMovieToDb(movie: Movie, completion: @escaping ((Result<Bool, Error>) -> Void)) {
+        
+    }
+    func fetchMovieFromDb(completion: @escaping ((Result<[Movie], Error>) -> Void)) {
+
+    }
+    func deleteMovieFromDb(movieId: Int, completion: @escaping ((Result<Bool, Error>) -> Void)) {
+
+    }
+}
+
+class DatabaseManager: NSObject, DatabaseManagerProtocol {
     
     func saveMovieToDb(movie: Movie, completion: @escaping ((Result<Bool, Error>) -> Void)) {
         let context = CoreDataContainer.persistentContainer.viewContext

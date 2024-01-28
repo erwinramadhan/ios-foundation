@@ -17,7 +17,12 @@ enum MovieDetailResponse {
     case failure(error: Error)
 }
 
-class MovieService {
+protocol MovieServiceProtocol {
+    func getMoviesWithCompletion(completionHandler: @escaping ((MoviesResponse) -> Void))
+    func getMovieDetailWithCompletion(movieId: Int, completionHandler: @escaping ((MovieDetailResponse) -> Void))
+}
+
+class MovieService: MovieServiceProtocol {
 
     static let shared = MovieService()
 

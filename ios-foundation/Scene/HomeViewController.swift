@@ -9,8 +9,8 @@ import UIKit
 
 class HomeViewController: UIViewController {
 
-    let movieService = MovieService.shared
-    let databaseManager = DatabaseManager()
+    public var movieService: MovieServiceProtocol? = MovieService()
+    public var databaseManager = DatabaseManager()
     
     @IBOutlet weak var iconBackImage: UIImageView!
     @IBOutlet weak var iconFavoriteImage: UIImageView!
@@ -27,7 +27,7 @@ class HomeViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        fetchMovieList { isSuccess in
+        fetchMovieList { isSuccess, _ in
             DispatchQueue.main.async {
                 self.tableView.reloadData()
             }
@@ -127,14 +127,14 @@ extension HomeViewController {
         })
     }
     
-    func fetchMovieList(completionHandler: @escaping (Bool) -> Void) {
-        movieService.getMoviesWithCompletion { [weak self] result in
+    func fetchMovieList(completionHandler: @escaping (Bool, [Movie]?) -> Void) {
+        movieService?.getMoviesWithCompletion { [weak self] result in
             guard let self else { return }
             switch result {
             case .success(let movie):
                 self.movies = movie.results
                 self.fetchFavoriteMovieList { isSuccess in
-                    completionHandler(isSuccess)
+                    completionHandler(isSuccess, movie.results)
                 }
             case .failure(let error):
                 break

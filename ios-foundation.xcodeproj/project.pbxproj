@@ -30,6 +30,7 @@
 		5D2784392B5E2954007BBE1F /* HomeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5D2784372B5E2954007BBE1F /* HomeViewController.xib */; };
 		5D27843D2B5E3F21007BBE1F /* MovieCellTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D27843B2B5E3F21007BBE1F /* MovieCellTableView.swift */; };
 		5D27843E2B5E3F21007BBE1F /* MovieCellTableView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5D27843C2B5E3F21007BBE1F /* MovieCellTableView.xib */; };
+		5D31CE932B6200CF00228E27 /* DetailViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D31CE922B6200CF00228E27 /* DetailViewControllerTests.swift */; };
 		5D47241E2B5E5A860055F8E8 /* Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D47241D2B5E5A860055F8E8 /* Utility.swift */; };
 		5D4724222B5E79A70055F8E8 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D4724202B5E79A70055F8E8 /* DetailViewController.swift */; };
 		5D4724232B5E79A70055F8E8 /* DetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5D4724212B5E79A70055F8E8 /* DetailViewController.xib */; };
@@ -37,6 +38,7 @@
 		5D47242B2B5F63440055F8E8 /* TagCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5D4724292B5F63440055F8E8 /* TagCollectionViewCell.xib */; };
 		5D4724302B5F6DF20055F8E8 /* TagView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D47242E2B5F6DF20055F8E8 /* TagView.swift */; };
 		5D4724312B5F6DF20055F8E8 /* TagView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5D47242F2B5F6DF20055F8E8 /* TagView.xib */; };
+		5D4BC4DA2B609B2700F6C0C7 /* HomeViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D4BC4D92B609B2700F6C0C7 /* HomeViewControllerTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -84,6 +86,7 @@
 		5D2784372B5E2954007BBE1F /* HomeViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = HomeViewController.xib; sourceTree = "<group>"; };
 		5D27843B2B5E3F21007BBE1F /* MovieCellTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieCellTableView.swift; sourceTree = "<group>"; };
 		5D27843C2B5E3F21007BBE1F /* MovieCellTableView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MovieCellTableView.xib; sourceTree = "<group>"; };
+		5D31CE922B6200CF00228E27 /* DetailViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewControllerTests.swift; sourceTree = "<group>"; };
 		5D47241D2B5E5A860055F8E8 /* Utility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utility.swift; sourceTree = "<group>"; };
 		5D4724202B5E79A70055F8E8 /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 		5D4724212B5E79A70055F8E8 /* DetailViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DetailViewController.xib; sourceTree = "<group>"; };
@@ -91,6 +94,7 @@
 		5D4724292B5F63440055F8E8 /* TagCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TagCollectionViewCell.xib; sourceTree = "<group>"; };
 		5D47242E2B5F6DF20055F8E8 /* TagView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagView.swift; sourceTree = "<group>"; };
 		5D47242F2B5F6DF20055F8E8 /* TagView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TagView.xib; sourceTree = "<group>"; };
+		5D4BC4D92B609B2700F6C0C7 /* HomeViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewControllerTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -208,6 +212,8 @@
 			isa = PBXGroup;
 			children = (
 				5D27841C2B5E28AD007BBE1F /* ios_foundationTests.swift */,
+				5D4BC4D92B609B2700F6C0C7 /* HomeViewControllerTests.swift */,
+				5D31CE922B6200CF00228E27 /* DetailViewControllerTests.swift */,
 			);
 			path = "ios-foundationTests";
 			sourceTree = "<group>";
@@ -416,7 +422,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5D4BC4DA2B609B2700F6C0C7 /* HomeViewControllerTests.swift in Sources */,
 				5D27841D2B5E28AD007BBE1F /* ios_foundationTests.swift in Sources */,
+				5D31CE932B6200CF00228E27 /* DetailViewControllerTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

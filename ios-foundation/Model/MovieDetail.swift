@@ -29,6 +29,7 @@ struct MovieDetail: Codable {
     var video: Bool?
     var voteAverage: Double?
     var voteCount: Int?
+    var isFavorite: Bool?
     
     private enum CodingKeys: String, CodingKey {
         case adult, budget, genres, homepage, id, overview, popularity, revenue, runtime, status, tagline, title, video
@@ -43,7 +44,7 @@ struct MovieDetail: Codable {
     }
 }
 
-struct Genre: Codable {
+struct Genre: Codable, Equatable {
     var id: Int?
     var name: String?
 }

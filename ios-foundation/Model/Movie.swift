@@ -20,7 +20,7 @@ struct MovieListResponse: Codable {
     }
 }
 
-struct Movie: Codable {
+struct Movie: Codable, Equatable {
     var adult: Bool?
     var backdropPath: String?
     var genreIds: [Int?]
