@@ -143,6 +143,7 @@ extension MovieFavoriteViewController {
     }
     
     func fetchFavoriteMovieList(completionHandler: @escaping (Bool) -> Void) {
+        self.favoriteMovies = []
         self.databaseManager.fetchMovieFromDb { resultDb in
             switch resultDb {
             case .success(let data):
